@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceTrack | AI-Powered Attendance System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --border: #e9ecef;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 35px 60px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-fast: all 0.15s ease;
+            --max-width: 1400px;
+            --sidebar-width: 280px;
+            --header-height: 80px;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            color: white;
+            padding: 2rem 1.5rem;
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: var(--transition);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar-brand i {
+            font-size: 1.75rem;
+            color: var(--primary-light);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition-fast);
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: var(--glass);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-nav a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-light);
+            transform: scaleY(0);
+            transition: var(--transition);
+            transform-origin: center;
+        }
+
+        .sidebar-nav a:hover::before, .sidebar-nav a.active::before {
+            transform: scaleY(1);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.15rem;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .logout-btn:hover {
+            color: var(--accent);
+        }
+
+        /* Header */
+        header {
+            background-color: var(--card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .menu-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn, .quick-actions-btn {
+            position: relative;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+
+        .notification-btn:hover, .quick-actions-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--accent);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 0;
+            transition: var(--transition);
+        }
+
+        .main-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .sidebar.active + main {
+            margin-left: var(--sidebar-width);
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            padding: 1.75rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .card-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+        }
+
+        .card-action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text);
+        }
+
+        /* Video Card */
+        .video-card {
+            grid-column: span 8;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            margin: 0 auto 1.5rem auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            aspect-ratio: 16/9;
+        }
+
+        .video-container video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: #f1f5f9;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(241, 245, 249, 0.9), rgba(226, 232, 240, 0.95));
+            flex-direction: column;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .video-overlay i {
+            font-size: 3rem;
+            color: var(--text-light);
+        }
+
+        .video-overlay p {
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* Schedule Card */
+        .schedule-card {
+            grid-column: span 4;
+        }
+
+        /* Stats Card */
+        .stats-card {
+            grid-column: span 4;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+            border-radius: var(--radius);
+            background-color: rgba(67, 97, 238, 0.05);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-icon.present {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.absent {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--error);
+        }
+
+        .stat-icon.late {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.total {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Recent Activity Card */
+        .activity-card {
+            grid-column: span 8;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius);
+            transition: var(--transition-fast);
+        }
+
+        .activity-item:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-name {
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .activity-status {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+        }
+
+        .status-present {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .status-absent {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--error);
+        }
+
+        .status-late {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 0.6s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--error);
+            color: white;
+            box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(231, 76, 60, 0.2);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+            box-shadow: 0 4px 6px rgba(46, 204, 113, 0.2);
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(46, 204, 113, 0.2);
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 1.1rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .time-input-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .time-input {
+            padding: 0.85rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            text-align: center;
+            flex: 1;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            border-left: 4px solid transparent;
+            transition: var(--transition);
+        }
+
+        .alert:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-message {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .alert-success {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left-color: var(--success);
+            color: #27ae60;
+        }
+
+        .alert-info {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left-color: var(--info);
+            color: #2980b9;
+        }
+
+        .alert-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left-color: var(--warning);
+            color: #d35400;
+        }
+
+        .alert-error {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--error);
+            color: #c0392b;
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background-color: rgba(149, 165, 166, 0.1);
+            color: #7f8c8d;
+        }
+
+        .status-pending {
+            background-color: rgba(241, 196, 15, 0.1);
+            color: #f39c12;
+        }
+
+        /* Spinner */
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+            transition: var(--transition);
+        }
+
+        .spinner {
+            width: 4rem;
+            height: 4rem;
+            border: 4px solid rgba(67, 97, 238, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .fab:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .video-card {
+                grid-column: span 12;
+            }
+            
+            .schedule-card {
+                grid-column: span 12;
+            }
+            
+            .stats-card {
+                grid-column: span 6;
+            }
+            
+            .activity-card {
+                grid-column: span 12;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 260px;
+                --header-height: 70px;
+            }
+            
+            main {
+                padding: 1.5rem;
+            }
+            
+            .stats-card {
+                grid-column: span 12;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .time-input-container {
+                flex-direction: column;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            :root {
+                --sidebar-width: 240px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .sidebar-brand span {
+                display: none;
+            }
+            
+            .sidebar-nav a span {
+                display: none;
+            }
+            
+            .sidebar-nav a i {
+                font-size: 1.3rem;
+            }
+            
+            .user-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="/" class="sidebar-brand">
+                <i class="fas fa-user-check"></i>
+                <span>FaceTrack</span>
+            </a>
+        </div>
+        
+        <nav>
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="/dashboard" class="active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/register">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Register Face</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/attendance_table">
+                        <i class="fas fa-table"></i>
+                        <span>View Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/roster">
+                        <i class="fas fa-list"></i>
+                        <span>Class Roster</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/help">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help & Support</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin User</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+                <button class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="header-actions">
+                <button class="quick-actions-btn">
+                    <i class="fas fa-bolt"></i>
+                </button>
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="main-content">
+            <div class="dashboard">
+                <!-- Video Card -->
+                <section class="card video-card fade-in">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-video"></i>
+                            Live Attendance Capture
+                        </h2>
+                        <span id="attendanceStatusIndicator" class="status-indicator status-inactive">
+                            <i class="fas fa-circle"></i>
+                            Inactive
+                        </span>
+                    </div>
+                    
+                    <div class="video-container">
+                        <video id="liveVideo" width="640" height="480" playsinline aria-label="Live video feed"></video>
+                        <div id="videoOverlay" class="video-overlay">
+                            <i class="fas fa-video-slash"></i>
+                            <p>Camera is currently inactive</p>
+                        </div>
+                    </div>
+                    
+                    <div id="attendanceAlert" class="alert alert-info">
+                        <div class="alert-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">Ready to Start</div>
+                            <p class="alert-message">Click "Start Attendance" to begin face recognition</p>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button id="startAttendanceBtn" class="btn btn-primary btn-lg">
+                            <i class="fas fa-play"></i>
+                            Start Attendance
+                        </button>
+                        <button id="stopAttendanceBtn" class="btn btn-danger btn-lg" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            Stop Attendance
+                        </button>
+                        <button id="captureBtn" class="btn btn-success btn-lg">
+                            <i class="fas fa-camera"></i>
+                            Capture Now
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Schedule Card -->
+                <section class="card schedule-card fade-in delay-1">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-clock"></i>
+                            Attendance Schedule
+                        </h2>
+                        <div class="card-actions">
+                            <button class="card-action-btn">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <form id="scheduleForm">
+                        <div class="form-group">
+                            <label for="scheduleStartTime" class="form-label">Start Time</label>
+                            <input type="time" id="scheduleStartTime" class="time-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="scheduleEndTime" class="form-label">End Time</label>
+                            <input type="time" id="scheduleEndTime" class="time-input" required>
+                        </div>
+                        <div class="time-input-container">
+                            <button id="setScheduleBtn" type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Set Schedule
+                            </button>
+                        </div>
+                    </form>
+                    <div id="scheduleAlert" class="alert alert-info">
+                        <div class="alert-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">Current Schedule</div>
+                            <p class="alert-message" id="currentScheduleWindow">Not scheduled</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Stats Card -->
+                <section class="card stats-card fade-in delay-2">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Today's Stats
+                        </h2>
+                        <div class="card-actions">
+                            <button class="card-action-btn">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-icon present">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Present</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-icon absent">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Absent</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-icon late">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Late</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-icon total">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-value">32</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Activity Card -->
+                <section class="card activity-card fade-in delay-3">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-history"></i>
+                            Recent Activity
+                        </h2>
+                        <div class="card-actions">
+                            <button class="card-action-btn">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-avatar">JD</div>
+                            <div class="activity-content">
+                                <div class="activity-name">John Doe</div>
+                                <div class="activity-time">2 minutes ago</div>
+                            </div>
+                            <span class="activity-status status-present">Present</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-avatar">AS</div>
+                            <div class="activity-content">
+                                <div class="activity-name">Alice Smith</div>
+                                <div class="activity-time">5 minutes ago</div>
+                            </div>
+                            <span class="activity-status status-late">Late (5 min)</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-avatar">RJ</div>
+                            <div class="activity-content">
+                                <div class="activity-name">Robert Johnson</div>
+                                <div class="activity-time">12 minutes ago</div>
+                            </div>
+                            <span class="activity-status status-present">Present</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-avatar">MB</div>
+                            <div class="activity-content">
+                                <div class="activity-name">Maria Brown</div>
+                                <div class="activity-time">18 minutes ago</div>
+                            </div>
+                            <span class="activity-status status-present">Present</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-avatar">DW</div>
+                            <div class="activity-content">
+                                <div class="activity-name">David Wilson</div>
+                                <div class="activity-time">25 minutes ago</div>
+                            </div>
+                            <span class="activity-status status-absent">Absent</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="helpFab">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <!-- Spinner Overlay -->
+    <div id="spinnerOverlay" class="spinner-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- In-app Notification -->
+    <div id="inAppNotification" style="display:none;position:fixed;bottom:2rem;right:2rem;z-index:9999;min-width:260px;max-width:350px;padding:1.25rem 1.5rem;background:#4361ee;color:#fff;border-radius:12px;box-shadow:0 4px 16px rgba(67,97,238,0.18);font-size:1.1rem;font-weight:500;align-items:center;gap:0.75rem;transition:opacity 0.3s;opacity:0.95;"></div>
+
+    <script>
+        // DOM Elements
+        const sidebar = document.querySelector('.sidebar');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const liveVideo = document.getElementById('liveVideo');
+        const videoOverlay = document.getElementById('videoOverlay');
+        const startAttendanceBtn = document.getElementById('startAttendanceBtn');
+        const stopAttendanceBtn = document.getElementById('stopAttendanceBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const attendanceAlert = document.getElementById('attendanceAlert');
+        const attendanceStatusIndicator = document.getElementById('attendanceStatusIndicator');
+        const scheduleForm = document.getElementById('scheduleForm');
+        const scheduleStartTime = document.getElementById('scheduleStartTime');
+        const scheduleEndTime = document.getElementById('scheduleEndTime');
+        const currentScheduleWindow = document.getElementById('currentScheduleWindow');
+        const spinnerOverlay = document.getElementById('spinnerOverlay');
+        const helpFab = document.getElementById('helpFab');
+
+        // State variables
+        let liveAttendanceStream = null;
+        let attendanceInterval = null;
+        let isAttendanceActive = false;
+        let schedulePollingInterval = null;
+        let wasWithinSchedule = false;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Toggle sidebar
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Load saved schedule if exists
+            loadSchedule();
+            
+            // Show initial alert
+            showAlert(attendanceAlert, 'info', 'Ready to Start', 'Click "Start Attendance" to begin face recognition');
+            
+            // Add animation to elements
+            animateElements();
+
+            // Start polling for scheduled attendance
+            if (schedulePollingInterval) clearInterval(schedulePollingInterval);
+            schedulePollingInterval = setInterval(pollScheduleAndAutoStart, 10000); // every 10 seconds
+        });
+
+        // Helper functions
+        function animateElements() {
+            const animatedElements = document.querySelectorAll('.fade-in');
+            animatedElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        }
+
+        function showSpinner() {
+            spinnerOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideSpinner() {
+            spinnerOverlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function showAlert(alertElement, type, title, message) {
+            alertElement.style.display = 'flex';
+            alertElement.className = `alert alert-${type}`;
+            
+            const icon = alertElement.querySelector('.alert-icon i');
+            const titleElement = alertElement.querySelector('.alert-title');
+            const messageElement = alertElement.querySelector('.alert-message');
+            
+            // Set icon based on type
+            switch(type) {
+                case 'success':
+                    icon.className = 'fas fa-check-circle';
+                    break;
+                case 'error':
+                    icon.className = 'fas fa-exclamation-circle';
+                    break;
+                case 'warning':
+                    icon.className = 'fas fa-exclamation-triangle';
+                    break;
+                default:
+                    icon.className = 'fas fa-info-circle';
+            }
+            
+            titleElement.textContent = title;
+            messageElement.textContent = message;
+        }
+
+        function updateStatusIndicator(active) {
+            if (active) {
+                attendanceStatusIndicator.className = 'status-indicator status-active';
+                attendanceStatusIndicator.innerHTML = '<i class="fas fa-circle"></i> Active';
+            } else {
+                attendanceStatusIndicator.className = 'status-indicator status-inactive';
+                attendanceStatusIndicator.innerHTML = '<i class="fas fa-circle"></i> Inactive';
+            }
+        }
+
+        // Attendance functions
+        async function startAttendance() {
+            showSpinner();
+            
+            try {
+                // Get camera access
+                liveAttendanceStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user' 
+                    } 
+                });
+                
+                // Show video stream
+                liveVideo.srcObject = liveAttendanceStream;
+                
+                // Wait for video to be ready
+                await new Promise((resolve, reject) => {
+                    liveVideo.onloadedmetadata = () => {
+                        liveVideo.play().then(resolve).catch(reject);
+                    };
+                    liveVideo.onerror = reject;
+                    
+                    setTimeout(() => reject(new Error('Video loading timeout')), 5000);
+                });
+                
+                videoOverlay.style.display = 'none';
+                
+                // Update UI
+                startAttendanceBtn.style.display = 'none';
+                stopAttendanceBtn.style.display = 'inline-flex';
+                isAttendanceActive = true;
+                updateStatusIndicator(true);
+                
+                showAlert(attendanceAlert, 'success', 'Attendance Active', 'System is now capturing attendance');
+                
+                // Start periodic face recognition
+                attendanceInterval = setInterval(captureAttendance, 5000);
+                
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                showAlert(attendanceAlert, 'error', 'Camera Error', 'Could not access camera. Please ensure permissions are granted.');
+                
+                // Clean up on error
+                if (liveAttendanceStream) {
+                    liveAttendanceStream.getTracks().forEach(track => track.stop());
+                    liveAttendanceStream = null;
+                }
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        function stopAttendance() {
+            // Stop video stream
+            if (liveAttendanceStream) {
+                liveAttendanceStream.getTracks().forEach(track => track.stop());
+                liveVideo.srcObject = null;
+                videoOverlay.style.display = 'flex';
+            }
+            
+            // Clear interval
+            if (attendanceInterval) {
+                clearInterval(attendanceInterval);
+            }
+            
+            // Update UI
+            startAttendanceBtn.style.display = 'inline-flex';
+            stopAttendanceBtn.style.display = 'none';
+            isAttendanceActive = false;
+            updateStatusIndicator(false);
+            
+            showAlert(attendanceAlert, 'info', 'Attendance Stopped', 'Click "Start Attendance" to begin again');
+        }
+
+        async function captureAttendance() {
+            if (!isAttendanceActive) return;
+            
+            // Check if video is ready
+            if (!liveVideo.videoWidth || !liveVideo.videoHeight) {
+                console.log('Video not ready yet, skipping capture');
+                return;
+            }
+            
+            showSpinner();
+            
+            try {
+                // Create canvas from video frame
+                const canvas = document.createElement('canvas');
+                canvas.width = liveVideo.videoWidth;
+                canvas.height = liveVideo.videoHeight;
+                const context = canvas.getContext('2d');
+                context.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
+                
+                // Convert to JPEG
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                
+                // Send to server for recognition
+                const response = await fetch('/take_attendance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: imageData })
+                });
+                
+                const data = await response.json();
+                
+                // Update UI based on response
+                if (data.status === 'success') {
+                    showAlert(attendanceAlert, 'success', 'Attendance Recorded', data.message || 'Face recognized successfully');
+                } else if (data.status === 'info') {
+                    showAlert(attendanceAlert, 'info', 'No Face Detected', data.message || 'Please position your face in the frame');
+                } else {
+                    showAlert(attendanceAlert, 'warning', 'Recognition Issue', data.message || 'Could not recognize face');
+                }
+                
+            } catch (error) {
+                console.error('Error capturing attendance:', error);
+                showAlert(attendanceAlert, 'error', 'System Error', 'Error during face recognition');
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        // Schedule functions
+        async function loadSchedule() {
+            try {
+                const response = await fetch('/get_schedule');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    scheduleStartTime.value = data.scheduled_start_time || '';
+                    scheduleEndTime.value = data.scheduled_end_time || '';
+                    if (data.scheduled_start_time && data.scheduled_end_time) {
+                        currentScheduleWindow.textContent = `${data.scheduled_start_time} to ${data.scheduled_end_time}`;
+                    } else {
+                        currentScheduleWindow.textContent = 'Not scheduled';
+                    }
+                } else {
+                    currentScheduleWindow.textContent = 'Not scheduled';
+                }
+            } catch (error) {
+                currentScheduleWindow.textContent = 'Error loading schedule';
+            }
+        }
+
+        scheduleForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const startTime = scheduleStartTime.value;
+            const endTime = scheduleEndTime.value;
+            showSpinner();
+            try {
+                const response = await fetch('/set_schedule', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ start_time: startTime, end_time: endTime })
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    showAlert(scheduleAlert, 'success', 'Schedule Saved', `Attendance will be captured from ${startTime} to ${endTime}`);
+                    loadSchedule();
+                } else {
+                    showAlert(scheduleAlert, 'error', 'Error', data.message || 'Failed to save schedule');
+                }
+            } catch (error) {
+                showAlert(scheduleAlert, 'error', 'System Error', 'Could not save schedule');
+            } finally {
+                hideSpinner();
+            }
+        });
+
+        // Event listeners
+        startAttendanceBtn.addEventListener('click', startAttendance);
+        stopAttendanceBtn.addEventListener('click', stopAttendance);
+        captureBtn.addEventListener('click', captureAttendance);
+        helpFab.addEventListener('click', () => {
+            window.location.href = '/help';
+        });
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isAttendanceActive) {
+                stopAttendance();
+            }
+        });
+
+        // User Info
+        function loadUserInfo() {
+            fetch('/current_user')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success' && data.user) {
+                        const user = data.user;
+                        document.querySelector('.user-avatar').textContent = user.avatar || 'AD';
+                        document.querySelector('.user-name').textContent = user.name;
+                        document.querySelector('.user-role').textContent = user.role;
+                        document.body.classList.add('logged-in');
+                        document.body.classList.remove('logged-out');
+                    } else {
+                        document.body.classList.remove('logged-in');
+                        document.body.classList.add('logged-out');
+                    }
+                });
+        }
+        loadUserInfo();
+        document.querySelector('.logout-btn').onclick = function() {
+            fetch('/logout').then(() => {
+                // Hide dashboard, show login modal
+                document.body.classList.remove('logged-in');
+                document.body.classList.add('logged-out');
+                showLoginModal();
+            });
+        };
+
+        // Dashboard Stats
+        function loadDashboardStats() {
+            fetch('/dashboard_stats')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const stats = data;
+                        document.querySelector('.stat-item .stat-value').textContent = stats.present;
+                        document.querySelectorAll('.stat-item')[0].querySelector('.stat-value').textContent = stats.present;
+                        document.querySelectorAll('.stat-item')[1].querySelector('.stat-value').textContent = stats.absent;
+                        document.querySelectorAll('.stat-item')[2].querySelector('.stat-value').textContent = stats.late;
+                        document.querySelectorAll('.stat-item')[3].querySelector('.stat-value').textContent = stats.total;
+                    }
+                });
+        }
+        loadDashboardStats();
+
+        // Recent Activity
+        function loadRecentActivity() {
+            fetch('/recent_activity')
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.querySelector('.activity-list');
+                    list.innerHTML = '';
+                    if (data.status === 'success' && data.activity.length > 0) {
+                        data.activity.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'activity-item';
+                            const avatar = document.createElement('div');
+                            avatar.className = 'activity-avatar';
+                            avatar.textContent = (item.name || '??').split(' ').map(x => x[0]).join('').toUpperCase().slice(0,2);
+                            const content = document.createElement('div');
+                            content.className = 'activity-content';
+                            const name = document.createElement('div');
+                            name.className = 'activity-name';
+                            name.textContent = item.name;
+                            const time = document.createElement('div');
+                            time.className = 'activity-time';
+                            time.textContent = `${item.date} ${item.time}`;
+                            content.appendChild(name);
+                            content.appendChild(time);
+                            const status = document.createElement('span');
+                            status.className = 'activity-status status-' + item.status.toLowerCase();
+                            status.textContent = item.status;
+                            div.appendChild(avatar);
+                            div.appendChild(content);
+                            div.appendChild(status);
+                            list.appendChild(div);
+                        });
+                    } else {
+                        const empty = document.createElement('div');
+                        empty.className = 'info-message';
+                        empty.textContent = 'No recent activity.';
+                        list.appendChild(empty);
+                    }
+                });
+        }
+        loadRecentActivity();
+
+        // Notifications
+        function loadNotifications() {
+            fetch('/notifications')
+                .then(res => res.json())
+                .then(data => {
+                    const btn = document.querySelector('.notification-btn');
+                    let badge = btn.querySelector('.notification-badge');
+                    if (data.status === 'success' && data.notifications.length > 0) {
+                        badge.textContent = data.notifications.length;
+                        btn.onclick = function() {
+                            showNotificationsDropdown(data.notifications);
+                        };
+                    } else {
+                        badge.textContent = '0';
+                        btn.onclick = null;
+                    }
+                });
+        }
+        function showNotificationsDropdown(notifications) {
+            let dropdown = document.getElementById('notifDropdown');
+            if (dropdown) dropdown.remove();
+            dropdown = document.createElement('div');
+            dropdown.id = 'notifDropdown';
+            dropdown.style.position = 'fixed';
+            dropdown.style.top = '70px';
+            dropdown.style.right = '2rem';
+            dropdown.style.background = '#fff';
+            dropdown.style.boxShadow = '0 8px 32px rgba(37,99,235,0.18),0 1.5px 8px #38bdf8';
+            dropdown.style.borderRadius = '14px';
+            dropdown.style.minWidth = '320px';
+            dropdown.style.zIndex = 3000;
+            dropdown.style.padding = '1rem 0.5rem';
+            notifications.forEach(note => {
+                const n = document.createElement('div');
+                n.style.padding = '0.5rem 0.75rem';
+                n.style.borderBottom = '1px solid #e5e7eb';
+                n.style.fontSize = '1em';
+                n.innerHTML = `<b>${note.message}</b><br><span style='color:#888;font-size:0.9em;'>${note.date} ${note.time}</span>`;
+                dropdown.appendChild(n);
+            });
+            if (notifications.length === 0) {
+                const n = document.createElement('div');
+                n.style.padding = '0.5rem 0.75rem';
+                n.textContent = 'No notifications.';
+                dropdown.appendChild(n);
+            }
+            document.body.appendChild(dropdown);
+            document.addEventListener('click', function handler(e) {
+                if (!dropdown.contains(e.target) && !document.querySelector('.notification-btn').contains(e.target)) {
+                    dropdown.remove();
+                    document.removeEventListener('click', handler);
+                }
+            });
+        }
+        loadNotifications();
+
+        // Quick Actions
+        document.querySelector('.quick-actions-btn').onclick = function() {
+            let modal = document.getElementById('quickActionsModal');
+            if (modal) modal.remove();
+            modal = document.createElement('div');
+            modal.id = 'quickActionsModal';
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.background = '#fff';
+            modal.style.boxShadow = '0 8px 32px rgba(37,99,235,0.18),0 1.5px 8px #38bdf8';
+            modal.style.borderRadius = '16px';
+            modal.style.padding = '2rem 2.5rem';
+            modal.style.zIndex = 4000;
+            modal.innerHTML = `
+                <h2 style='margin-bottom:1.5rem;color:#2563eb;'>Quick Actions</h2>
+                <div style='display:flex;flex-direction:column;gap:1rem;'>
+                    <button class='btn btn-primary' onclick="window.location.href='/register'">Register Face</button>
+                    <button class='btn btn-primary' onclick="window.location.href='/attendance_table'">View Records</button>
+                    <button class='btn btn-primary' onclick="window.location.href='/roster'">Class Roster</button>
+                    <button class='btn btn-outline' onclick="window.location.href='/settings'">Settings</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.addEventListener('click', function handler(e) {
+                if (!modal.contains(e.target) && !document.querySelector('.quick-actions-btn').contains(e.target)) {
+                    modal.remove();
+                    document.removeEventListener('click', handler);
+                }
+            });
+        };
+
+        // Login Modal (if not logged in)
+        function checkLogin() {
+            fetch('/current_user').then(res => res.json()).then(data => {
+                if (!data.user || !data.user.name) {
+                    document.body.classList.remove('logged-in');
+                    document.body.classList.add('logged-out');
+                    showLoginModal();
+                } else {
+                    document.body.classList.add('logged-in');
+                    document.body.classList.remove('logged-out');
+                }
+            });
+        }
+        checkLogin();
+
+        // Login Modal (if not logged in)
+        function showLoginModal() {
+            let modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(0,0,0,0.25)';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.zIndex = 5000;
+            modal.innerHTML = `
+                <div style='background:#fff;padding:2.5rem 2rem;border-radius:16px;box-shadow:0 8px 32px rgba(37,99,235,0.18),0 1.5px 8px #38bdf8;min-width:320px;'>
+                    <h2 style='color:#2563eb;margin-bottom:1.5rem;'>Login</h2>
+                    <input id='loginUsername' class='form-control' placeholder='Username' style='margin-bottom:1rem;'>
+                    <input id='loginPassword' class='form-control' type='password' placeholder='Password' style='margin-bottom:1.5rem;'>
+                    <button class='btn btn-primary' id='loginBtn' style='width:100%;'>Login</button>
+                    <div id='loginError' style='color:#e74c3c;margin-top:1rem;display:none;'></div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.getElementById('loginBtn').onclick = function() {
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value.trim();
+                fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                }).then(res => res.json()).then(data => {
+                    if (data.status === 'success') {
+                        modal.remove();
+                        window.location.reload();
+                    } else {
+                        document.getElementById('loginError').textContent = data.message;
+                        document.getElementById('loginError').style.display = '';
+                    }
+                });
+            };
+        }
+
+        // Hide dashboard content if not logged in
+        function updateDashboardVisibility() {
+            const mainContent = document.querySelector('.main-content');
+            const sidebar = document.querySelector('.sidebar');
+            const header = document.querySelector('header');
+            if (document.body.classList.contains('logged-out')) {
+                if (mainContent) mainContent.style.display = 'none';
+                if (sidebar) sidebar.style.display = 'none';
+                if (header) header.style.display = 'none';
+            } else {
+                if (mainContent) mainContent.style.display = '';
+                if (sidebar) sidebar.style.display = '';
+                if (header) header.style.display = '';
+            }
+        }
+        // Observe class changes
+        const observer = new MutationObserver(updateDashboardVisibility);
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        updateDashboardVisibility();
+
+        // --- Scheduled Attendance Polling ---
+        function showPopup(title, message) {
+            // In-app notification (not alert)
+            const notif = document.getElementById('inAppNotification');
+            notif.innerHTML = `<strong>${title}</strong><br>${message}`;
+            notif.style.display = 'flex';
+            notif.style.opacity = '0.95';
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                setTimeout(() => { notif.style.display = 'none'; }, 400);
+            }, 4000);
+        }
+
+        async function pollScheduleAndAutoStart() {
+            try {
+                const response = await fetch('/get_schedule');
+                const data = await response.json();
+                if (data.status === 'success' && data.scheduled_start_time && data.scheduled_end_time) {
+                    const now = new Date();
+                    const pad = n => n.toString().padStart(2, '0');
+                    const nowStr = pad(now.getHours()) + ':' + pad(now.getMinutes());
+                    const start = data.scheduled_start_time;
+                    const end = data.scheduled_end_time;
+                    // Compare times as strings (HH:MM)
+                    const withinSchedule = (nowStr >= start && nowStr < end);
+                    if (withinSchedule && !isAttendanceActive) {
+                        startAttendance();
+                        showPopup('Scheduled Attendance', `Attendance started automatically at ${nowStr}`);
+                    } else if (!withinSchedule && isAttendanceActive) {
+                        stopAttendance();
+                        showPopup('Scheduled Attendance', `Attendance stopped automatically at ${nowStr}`);
+                    }
+                    wasWithinSchedule = withinSchedule;
+                }
+            } catch (e) {
+                // Ignore errors
+            }
+        }
+    </script>
+</body>
+</html>

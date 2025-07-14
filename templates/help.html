@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & FAQ | FaceTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --border: #e9ecef;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --max-width: 1200px;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+        }
+        header {
+            background: var(--card);
+            box-shadow: var(--shadow);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+        }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a.active, .nav-links a:hover {
+            color: var(--primary);
+        }
+        .help-container {
+            max-width: 700px;
+            margin: 3rem auto;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .faq {
+            margin-top: 2rem;
+        }
+        .faq-item {
+            margin-bottom: 2rem;
+        }
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .faq-answer {
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="nav-brand" style="font-weight:700;font-size:1.25rem;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:0.5rem;">
+            <i class="fas fa-user-check"></i> FaceTrack
+        </a>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/register">Register Face</a></li>
+            <li><a href="/attendance_table">View Records</a></li>
+            <li><a href="/roster">Class Roster</a></li>
+            <li><a href="/settings">Settings</a></li>
+            <li><a href="/help" class="active">Help</a></li>
+        </ul>
+    </header>
+    <main>
+        <div class="help-container">
+            <h1>Help & FAQ</h1>
+            <div class="faq">
+                <div class="faq-item">
+                    <div class="faq-question">How do I register a new student?</div>
+                    <div class="faq-answer">Go to the Register Face page and use the webcam or upload an image. For bulk registration, upload multiple images named after each student.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How is attendance captured?</div>
+                    <div class="faq-answer">Click "Start Attendance" on the dashboard. The system will use the webcam to recognize faces and mark attendance automatically.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How do I view or edit attendance records?</div>
+                    <div class="faq-answer">Go to the View Records page. You can filter by date or name, and edit or delete records as needed.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How do I manage the class roster?</div>
+                    <div class="faq-answer">Go to the Class Roster page to view, edit, rename, or delete students and their images.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Who can log in?</div>
+                    <div class="faq-answer">Only the teacher (username: <b>teacher</b>, password: <b>neards8book</b>) can log in and access the dashboard.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Who do I contact for support?</div>
+                    <div class="faq-answer">For technical support, contact your system administrator or the developer who set up FaceTrack.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html> 

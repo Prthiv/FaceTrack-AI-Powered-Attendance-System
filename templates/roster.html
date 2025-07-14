@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Roster | FaceTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --border: #e9ecef;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 35px 60px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-fast: all 0.15s ease;
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a i {
+            font-size: 1rem;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .roster-container {
+            background-color: var(--card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .roster-container:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-card {
+            background-color: #f8fafc;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .roster-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .roster-table th {
+            background-color: #f8fafc;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .roster-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .roster-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .roster-table tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-light);
+            background-color: #f1f5f9;
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .student-id {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            white-space: nowrap;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-danger {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
+        }
+
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .avatar-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+            background-color: #f1f5f9;
+        }
+
+        .avatar-upload-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-upload-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .roster-container {
+                padding: 1.5rem;
+            }
+
+            .stats-card {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .stat-item {
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .stat-item:last-child {
+                border-bottom: none;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-brand span {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .roster-table th, 
+            .roster-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .student-avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+            .modal {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav aria-label="Main navigation">
+            <a href="/" class="nav-brand">
+                <i class="fas fa-user-check"></i>
+                <span>FaceTrack</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="/register"><i class="fas fa-user-plus"></i> Register Face</a></li>
+                <li><a href="/attendance_table"><i class="fas fa-table"></i> Attendance Records</a></li>
+                <li><a href="/roster" class="active"><i class="fas fa-list"></i> Class Roster</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="roster-container">
+            <div class="page-header">
+                <h1>Class Roster</h1>
+                <p>Manage your class student information</p>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalStudents">0</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="activeStudents">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="inactiveStudents">0</div>
+                    <div class="stat-label">Inactive</div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="roster-table" id="rosterTable">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Student Information</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rosterBody">
+                        <!-- Students will be loaded here -->
+                    </tbody>
+                </table>
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-users-slash"></i>
+                    <h3>No Students Found</h3>
+                    <p>Add students to your class roster to get started</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Student Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Student</h3>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <form id="editStudentForm">
+                <div class="avatar-upload">
+                    <img src="" alt="Student Photo" class="avatar-preview" id="editAvatarPreview">
+                    <button type="button" class="btn btn-outline avatar-upload-btn">
+                        <i class="fas fa-camera"></i> Change Photo
+                        <input type="file" class="avatar-upload-input" id="editAvatarInput" accept="image/*">
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="editName" class="form-label">Full Name</label>
+                    <input type="text" id="editName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editId" class="form-label">Student ID</label>
+                    <input type="text" id="editId" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="editStatus" class="form-label">Status</label>
+                    <select id="editStatus" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="cancelEdit">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Student</h3>
+                <button class="modal-close" id="closeAddModal">&times;</button>
+            </div>
+            <form id="addStudentForm">
+                <div class="avatar-upload">
+                    <img src="https://ui-avatars.com/api/?name=New+Student&background=4895ef&color=fff" 
+                         alt="Student Photo" class="avatar-preview" id="addAvatarPreview">
+                    <button type="button" class="btn btn-outline avatar-upload-btn">
+                        <i class="fas fa-camera"></i> Upload Photo
+                        <input type="file" class="avatar-upload-input" id="addAvatarInput" accept="image/*">
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="addName" class="form-label">Full Name *</label>
+                    <input type="text" id="addName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="addId" class="form-label">Student ID</label>
+                    <input type="text" id="addId" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="cancelAdd">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3>
+                <button class="modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteStudentName"></strong> from the roster?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="cancelDelete">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete Student</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="spinnerOverlay" class="spinner-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const rosterBody = document.getElementById('rosterBody');
+        const emptyState = document.getElementById('emptyState');
+        const totalStudentsEl = document.getElementById('totalStudents');
+        const activeStudentsEl = document.getElementById('activeStudents');
+        const inactiveStudentsEl = document.getElementById('inactiveStudents');
+        
+        // Modal elements
+        const editModal = document.getElementById('editModal');
+        const addModal = document.getElementById('addModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeEditModal = document.getElementById('closeEditModal');
+        const closeAddModal = document.getElementById('closeAddModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelEdit = document.getElementById('cancelEdit');
+        const cancelAdd = document.getElementById('cancelAdd');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const editStudentForm = document.getElementById('editStudentForm');
+        const addStudentForm = document.getElementById('addStudentForm');
+        const confirmDelete = document.getElementById('confirmDelete');
+        const deleteStudentName = document.getElementById('deleteStudentName');
+        const spinnerOverlay = document.getElementById('spinnerOverlay');
+
+        // State variables
+        let currentStudent = null;
+        let students = [];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRoster();
+            setupEventListeners();
+        });
+
+        // Load roster data
+        function loadRoster() {
+            showSpinner();
+            
+            fetch('/get_roster')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success' && data.students.length > 0) {
+                        students = data.students;
+                        renderRoster(students);
+                        updateStats(students);
+                        emptyState.style.display = 'none';
+                    } else {
+                        students = [];
+                        rosterBody.innerHTML = '';
+                        emptyState.style.display = 'flex';
+                        updateStats([]);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading roster:', error);
+                    showMessage('Error loading roster data', 'error');
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+        }
+
+        // Render roster table
+        function renderRoster(students) {
+            rosterBody.innerHTML = '';
+            
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                
+                // Photo column
+                const photoCell = document.createElement('td');
+                const avatar = document.createElement('img');
+                avatar.className = 'student-avatar';
+                avatar.src = student.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=4895ef&color=fff`;
+                avatar.alt = student.name;
+                photoCell.appendChild(avatar);
+                row.appendChild(photoCell);
+                
+                // Info column
+                const infoCell = document.createElement('td');
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'student-name';
+                nameDiv.textContent = student.name;
+                
+                const idDiv = document.createElement('div');
+                idDiv.className = 'student-id';
+                idDiv.textContent = student.id || 'ID not set';
+                
+                infoCell.appendChild(nameDiv);
+                infoCell.appendChild(idDiv);
+                row.appendChild(infoCell);
+                
+                // Status column
+                const statusCell = document.createElement('td');
+                const statusBadge = document.createElement('span');
+                statusBadge.className = `status-badge ${student.status === 'active' ? 'status-present' : 'status-absent'}`;
+                statusBadge.textContent = student.status === 'active' ? 'Active' : 'Inactive';
+                statusCell.appendChild(statusBadge);
+                row.appendChild(statusCell);
+                
+                // Actions column
+                const actionsCell = document.createElement('td');
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'action-buttons';
+                
+                const editBtn = document.createElement('button');
+                editBtn.className = 'btn btn-outline btn-sm';
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
+                editBtn.addEventListener('click', () => openEditModal(student));
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-danger btn-sm';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                deleteBtn.addEventListener('click', () => openDeleteModal(student));
+                
+                actionsDiv.appendChild(editBtn);
+                actionsDiv.appendChild(deleteBtn);
+                actionsCell.appendChild(actionsDiv);
+                row.appendChild(actionsCell);
+                
+                rosterBody.appendChild(row);
+            });
+        }
+
+        // Update statistics
+        function updateStats(students) {
+            const total = students.length;
+            const active = students.filter(s => s.status === 'active').length;
+            const inactive = total - active;
+            
+            totalStudentsEl.textContent = total;
+            activeStudentsEl.textContent = active;
+            inactiveStudentsEl.textContent = inactive;
+        }
+
+        // Open edit modal
+        function openEditModal(student) {
+            currentStudent = student;
+            
+            // Set form values
+            document.getElementById('editName').value = student.name;
+            document.getElementById('editId').value = student.id || '';
+            document.getElementById('editStatus').value = student.status || 'active';
+            
+            // Set avatar preview
+            const avatarPreview = document.getElementById('editAvatarPreview');
+            avatarPreview.src = student.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=4895ef&color=fff`;
+            
+            // Show modal
+            editModal.classList.add('active');
+        }
+
+        // Open add modal
+        function openAddModal() {
+            // Reset form
+            addStudentForm.reset();
+            
+            // Set default avatar
+            const avatarPreview = document.getElementById('addAvatarPreview');
+            avatarPreview.src = 'https://ui-avatars.com/api/?name=New+Student&background=4895ef&color=fff';
+            
+            // Show modal
+            addModal.classList.add('active');
+        }
+
+        // Open delete confirmation modal
+        function openDeleteModal(student) {
+            currentStudent = student;
+            deleteStudentName.textContent = student.name;
+            deleteModal.classList.add('active');
+        }
+
+        // Close all modals
+        function closeModals() {
+            editModal.classList.remove('active');
+            addModal.classList.remove('active');
+            deleteModal.classList.remove('active');
+            currentStudent = null;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Modal close buttons
+            closeEditModal.addEventListener('click', closeModals);
+            closeAddModal.addEventListener('click', closeModals);
+            closeDeleteModal.addEventListener('click', closeModals);
+            cancelEdit.addEventListener('click', closeModals);
+            cancelAdd.addEventListener('click', closeModals);
+            cancelDelete.addEventListener('click', closeModals);
+            
+            // Edit student form submission
+            editStudentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('editName').value.trim();
+                const id = document.getElementById('editId').value.trim();
+                const status = document.getElementById('editStatus').value;
+                const avatarInput = document.getElementById('editAvatarInput');
+                
+                if (!name) {
+                    alert('Please enter a name');
+                    return;
+                }
+                
+                showSpinner();
+                
+                // Handle image upload if changed
+                if (avatarInput.files.length > 0) {
+                    const file = avatarInput.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function() {
+                        const imageData = reader.result;
+                        updateStudent(currentStudent, name, id, status, imageData);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    updateStudent(currentStudent, name, id, status);
+                }
+            });
+            
+            // Add student form submission
+            addStudentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('addName').value.trim();
+                const id = document.getElementById('addId').value.trim();
+                const avatarInput = document.getElementById('addAvatarInput');
+                
+                if (!name) {
+                    alert('Please enter a name');
+                    return;
+                }
+                
+                showSpinner();
+                
+                // Handle image upload if provided
+                if (avatarInput.files.length > 0) {
+                    const file = avatarInput.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function() {
+                        const imageData = reader.result;
+                        addStudent(name, id, imageData);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    addStudent(name, id);
+                }
+            });
+            
+            // Delete confirmation
+            confirmDelete.addEventListener('click', () => {
+                if (!currentStudent) return;
+                
+                showSpinner();
+                
+                fetch('/delete_student', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        name: currentStudent.name 
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showMessage('Student deleted successfully', 'success');
+                        loadRoster();
+                        closeModals();
+                    } else {
+                        showMessage(data.message || 'Failed to delete student', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting student:', error);
+                    showMessage('Error deleting student', 'error');
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+            });
+            
+            // Avatar upload preview for edit modal
+            document.getElementById('editAvatarInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('editAvatarPreview').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Avatar upload preview for add modal
+            document.getElementById('addAvatarInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('addAvatarPreview').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Update student data
+        function updateStudent(oldStudent, name, id, status, imageData = null) {
+            const data = {
+                old_name: oldStudent.name,
+                new_name: name,
+                id: id,
+                status: status
+            };
+            
+            if (imageData) {
+                data.image = imageData;
+            }
+            
+            fetch('/update_student', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showMessage('Student updated successfully', 'success');
+                    loadRoster();
+                    closeModals();
+                } else {
+                    showMessage(data.message || 'Failed to update student', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating student:', error);
+                showMessage('Error updating student', 'error');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        // Add new student
+        function addStudent(name, id, imageData = null) {
+            const data = {
+                name: name,
+                id: id
+            };
+            
+            if (imageData) {
+                data.image = imageData;
+            }
+            
+            fetch('/add_student', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showMessage('Student added successfully', 'success');
+                    loadRoster();
+                    closeModals();
+                } else {
+                    showMessage(data.message || 'Failed to add student', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error adding student:', error);
+                showMessage('Error adding student', 'error');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        // Helper function to show spinner
+        function showSpinner() {
+            spinnerOverlay.style.display = 'flex';
+        }
+
+        // Helper function to hide spinner
+        function hideSpinner() {
+            spinnerOverlay.style.display = 'none';
+        }
+
+        // Helper function to show messages
+        function showMessage(text, type) {
+            // In a real implementation, you'd show this in a toast or alert component
+            console.log(`[${type}] ${text}`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records | FaceTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --border: #e9ecef;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 35px 60px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-fast: all 0.15s ease;
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a i {
+            font-size: 1rem;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .attendance-container {
+            background-color: var(--card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            min-height: 600px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .attendance-container:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .date-list {
+            width: 220px;
+            background-color: #f8fafc;
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .date-list-header {
+            padding: 0 1.5rem 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .date-list-header h2 {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .date-scroll {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .date-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 0.95rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .date-btn:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .date-btn.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .date-btn.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--primary);
+        }
+
+        .attendance-content {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .attendance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .attendance-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .attendance-title span {
+            font-weight: 400;
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .attendance-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            white-space: nowrap;
+        }
+
+        .btn-danger {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
+        }
+
+        .btn-danger:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .attendance-table th {
+            background-color: #f8fafc;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .attendance-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .attendance-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .attendance-table tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-present {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+
+        .status-absent {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--error);
+        }
+
+        .status-late {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text);
+        }
+
+        .action-btn.delete {
+            color: var(--error);
+        }
+
+        .action-btn.delete:hover {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-light);
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .attendance-container {
+                flex-direction: column;
+            }
+
+            .date-list {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem 0;
+            }
+
+            .date-scroll {
+                display: flex;
+                overflow-x: auto;
+                padding: 0 1rem;
+                gap: 0.5rem;
+            }
+
+            .date-btn {
+                white-space: nowrap;
+                padding: 0.5rem 1rem;
+                border-radius: var(--radius-full);
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            .date-btn.active {
+                background-color: var(--primary);
+                color: white;
+            }
+
+            .date-btn.active::before {
+                display: none;
+            }
+
+            .date-list-header {
+                display: none;
+            }
+
+            .attendance-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-brand span {
+                display: none;
+            }
+
+            .attendance-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .attendance-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav aria-label="Main navigation">
+            <a href="/" class="nav-brand">
+                <i class="fas fa-user-check"></i>
+                <span>FaceTrack</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="/register"><i class="fas fa-user-plus"></i> Register Face</a></li>
+                <li><a href="/attendance_table" class="active"><i class="fas fa-table"></i> Attendance Records</a></li>
+                <li><a href="/roster"><i class="fas fa-list"></i> Class Roster</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="attendance-container">
+            <div class="date-list">
+                <div class="date-list-header">
+                    <h2>Attendance Dates</h2>
+                </div>
+                <div class="date-scroll" id="dateList">
+                    <!-- Dates will be loaded here -->
+                </div>
+            </div>
+            <div class="attendance-content">
+                <div class="attendance-header">
+                    <h2 class="attendance-title" id="dateTitle">Attendance Records <span id="dateSubtitle"></span></h2>
+                    <div class="attendance-actions">
+                        <button class="btn btn-outline" id="exportBtn">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button class="btn btn-outline" id="showAbsenteesBtn">
+                            <i class="fas fa-user-slash"></i> Show Absentees
+                        </button>
+                        <button class="btn btn-outline" id="showAllBtn" style="display:none;">
+                            <i class="fas fa-list"></i> Show All
+                        </button>
+                        <button class="btn btn-danger" id="deleteDayBtn" style="display: none;">
+                            <i class="fas fa-trash"></i> Delete Day
+                        </button>
+                    </div>
+                </div>
+                <div class="attendance-table-container">
+                    <table class="attendance-table" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceBody">
+                            <!-- Attendance records will be loaded here -->
+                        </tbody>
+                    </table>
+                    <div class="empty-state" id="emptyState">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>No Attendance Records</h3>
+                        <p>Select a date to view attendance records</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="spinnerOverlay" class="spinner-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const dateList = document.getElementById('dateList');
+        const dateTitle = document.getElementById('dateTitle');
+        const dateSubtitle = document.getElementById('dateSubtitle');
+        const attendanceBody = document.getElementById('attendanceBody');
+        const emptyState = document.getElementById('emptyState');
+        const deleteDayBtn = document.getElementById('deleteDayBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const spinnerOverlay = document.getElementById('spinnerOverlay');
+
+        // State variables
+        let selectedDate = null;
+        let attendanceData = [];
+        let showingAbsentees = false;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDates();
+            
+            // Set up event listeners
+            deleteDayBtn.addEventListener('click', deleteSelectedDay);
+            exportBtn.addEventListener('click', exportAttendanceData);
+            document.getElementById('showAbsenteesBtn').addEventListener('click', showAbsentees);
+            document.getElementById('showAllBtn').addEventListener('click', showAllRecords);
+        });
+
+        // Load available dates
+        function loadDates() {
+            showSpinner();
+            
+            fetch('/attendance_dates')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success' && data.dates.length > 0) {
+                        renderDateList(data.dates);
+                        // Automatically select the most recent date
+                        if (data.dates.length > 0) {
+                            selectDate(data.dates[0]);
+                        }
+                    } else {
+                        dateList.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-times"></i><p>No attendance dates available</p></div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading dates:', error);
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+        }
+
+        // Render the list of dates
+        function renderDateList(dates) {
+            dateList.innerHTML = '';
+            
+            dates.forEach(date => {
+                const dateBtn = document.createElement('button');
+                dateBtn.className = 'date-btn';
+                dateBtn.textContent = formatDateDisplay(date);
+                dateBtn.addEventListener('click', () => selectDate(date));
+                
+                if (date === selectedDate) {
+                    dateBtn.classList.add('active');
+                }
+                
+                dateList.appendChild(dateBtn);
+            });
+        }
+
+        // Select a date and load its attendance records
+        function selectDate(date) {
+            selectedDate = date;
+            
+            // Update active state in date list
+            document.querySelectorAll('.date-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === formatDateDisplay(date));
+            });
+            
+            // Update UI
+            dateSubtitle.textContent = formatDateDisplay(date, true);
+            deleteDayBtn.style.display = 'inline-flex';
+            emptyState.style.display = 'none';
+            
+            // Load attendance data for selected date
+            loadAttendanceData(date);
+        }
+
+        // Load attendance data for a specific date
+        function loadAttendanceData(date) {
+            showSpinner();
+            attendanceBody.innerHTML = '';
+            
+            fetch(`/attendance_for_date?date=${encodeURIComponent(date)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success' && data.records.length > 0) {
+                        attendanceData = data.records;
+                        if (showingAbsentees) {
+                            showAbsentees();
+                        } else {
+                            renderAttendanceTable(data.records);
+                        }
+                        emptyState.style.display = 'none';
+                    } else {
+                        attendanceData = [];
+                        attendanceBody.innerHTML = '';
+                        emptyState.style.display = 'flex';
+                        emptyState.querySelector('h3').textContent = 'No Records for This Date';
+                        emptyState.querySelector('p').textContent = 'No attendance records found for the selected date';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading attendance data:', error);
+                    showMessage('Error loading attendance data', 'error');
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+        }
+
+        // Render the attendance table
+        function renderAttendanceTable(records) {
+            attendanceBody.innerHTML = '';
+            
+            records.forEach(record => {
+                const row = document.createElement('tr');
+                
+                // Name column
+                const nameCell = document.createElement('td');
+                nameCell.textContent = record.name;
+                row.appendChild(nameCell);
+                
+                // Status column
+                const statusCell = document.createElement('td');
+                const statusBadge = document.createElement('span');
+                statusBadge.className = `status-badge status-${record.status.toLowerCase()}`;
+                statusBadge.innerHTML = `<i class="fas ${getStatusIcon(record.status)}"></i> ${record.status}`;
+                statusBadge.addEventListener('click', () => toggleStatus(record));
+                statusCell.appendChild(statusBadge);
+                row.appendChild(statusCell);
+                
+                // Time column
+                const timeCell = document.createElement('td');
+                timeCell.textContent = record.time || '--';
+                row.appendChild(timeCell);
+                
+                // Actions column
+                const actionsCell = document.createElement('td');
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'action-btn delete';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteBtn.title = 'Delete record';
+                deleteBtn.addEventListener('click', () => deleteAttendanceRecord(record));
+                actionsCell.appendChild(deleteBtn);
+                row.appendChild(actionsCell);
+                
+                attendanceBody.appendChild(row);
+            });
+        }
+
+        // Toggle attendance status
+        function toggleStatus(record) {
+            const newStatus = record.status.toLowerCase() === 'present' ? 'Absent' : 'Present';
+            
+            showSpinner();
+            
+            fetch('/update_attendance_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    date: selectedDate, 
+                    name: record.name, 
+                    status: newStatus 
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    loadAttendanceData(selectedDate);
+                } else {
+                    showMessage(data.message || 'Failed to update status', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
+                showMessage('Error updating status', 'error');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        // Delete a single attendance record
+        function deleteAttendanceRecord(record) {
+            if (!confirm(`Delete attendance record for ${record.name} on ${selectedDate}?`)) return;
+            
+            showSpinner();
+            
+            fetch('/delete_attendance_record', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    date: selectedDate, 
+                    name: record.name
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showMessage(`Record for ${record.name} deleted`, 'success');
+                    loadAttendanceData(selectedDate);
+                } else {
+                    showMessage(data.message || 'Failed to delete record', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting record:', error);
+                showMessage('Error deleting record', 'error');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        // Delete all records for the selected day
+        function deleteSelectedDay() {
+            if (!selectedDate || !confirm(`Delete ALL attendance records for ${selectedDate}? This cannot be undone.`)) return;
+            
+            showSpinner();
+            
+            fetch('/delete_attendance_day', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    date: selectedDate
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showMessage(`All records for ${selectedDate} deleted`, 'success');
+                    selectedDate = null;
+                    dateSubtitle.textContent = '';
+                    deleteDayBtn.style.display = 'none';
+                    loadDates();
+                    attendanceBody.innerHTML = '';
+                    emptyState.style.display = 'flex';
+                    emptyState.querySelector('h3').textContent = 'No Date Selected';
+                    emptyState.querySelector('p').textContent = 'Select a date to view attendance records';
+                } else {
+                    showMessage(data.message || 'Failed to delete day records', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting day records:', error);
+                showMessage('Error deleting day records', 'error');
+            })
+            .finally(() => {
+                hideSpinner();
+            });
+        }
+
+        // Export attendance data
+        function exportAttendanceData() {
+            if (!selectedDate || attendanceData.length === 0) {
+                showMessage('No data to export', 'warning');
+                return;
+            }
+            
+            showSpinner();
+            
+            // In a real implementation, this would generate a CSV or PDF
+            // For demo purposes, we'll just simulate a download
+            setTimeout(() => {
+                hideSpinner();
+                showMessage('Export generated successfully', 'success');
+                
+                // Simulate download
+                const blob = new Blob([generateCSV()], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `attendance_${selectedDate}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 1000);
+        }
+
+        // Helper function to generate CSV
+        function generateCSV() {
+            let csv = 'Name,Status,Time\n';
+            attendanceData.forEach(record => {
+                csv += `"${record.name}","${record.status}","${record.time || ''}"\n`;
+            });
+            return csv;
+        }
+
+        // Helper function to format date for display
+        function formatDateDisplay(dateString, withDay = false) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            if (withDay) {
+                options.weekday = 'long';
+            }
+            return date.toLocaleDateString(undefined, options);
+        }
+
+        // Helper function to get status icon
+        function getStatusIcon(status) {
+            switch(status.toLowerCase()) {
+                case 'present': return 'fa-check-circle';
+                case 'absent': return 'fa-times-circle';
+                case 'late': return 'fa-clock';
+                default: return 'fa-question-circle';
+            }
+        }
+
+        // Helper function to show spinner
+        function showSpinner() {
+            spinnerOverlay.style.display = 'flex';
+        }
+
+        // Helper function to hide spinner
+        function hideSpinner() {
+            spinnerOverlay.style.display = 'none';
+        }
+
+        // Helper function to show messages
+        function showMessage(text, type) {
+            // In a real implementation, you'd show this in a toast or alert component
+            console.log(`[${type}] ${text}`);
+        }
+
+        function showAbsentees() {
+            if (!attendanceData.length) return;
+            const absentees = attendanceData.filter(r => r.status.toLowerCase() === 'absent');
+            renderAttendanceTable(absentees);
+            showingAbsentees = true;
+            document.getElementById('showAbsenteesBtn').style.display = 'none';
+            document.getElementById('showAllBtn').style.display = 'inline-flex';
+        }
+
+        function showAllRecords() {
+            renderAttendanceTable(attendanceData);
+            showingAbsentees = false;
+            document.getElementById('showAbsenteesBtn').style.display = 'inline-flex';
+            document.getElementById('showAllBtn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

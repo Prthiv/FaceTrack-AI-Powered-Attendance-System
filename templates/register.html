@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Face | FaceTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --border: #e9ecef;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-md: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 35px 60px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-fast: all 0.15s ease;
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a i {
+            font-size: 1rem;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .register-container {
+            background-color: var(--card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            background-color: #f1f5f9;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section {
+            background-color: #f8fafc;
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background-color: #f1f5f9;
+        }
+
+        .video-container video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: rgba(241, 245, 249, 0.9);
+        }
+
+        .video-overlay i {
+            font-size: 2.5rem;
+            color: var(--text-light);
+        }
+
+        .video-overlay p {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-block {
+            display: flex;
+            width: 100%;
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid transparent;
+        }
+
+        .message i {
+            font-size: 1.25rem;
+        }
+
+        .message-success {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left-color: var(--success);
+            color: #27ae60;
+        }
+
+        .message-error {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--error);
+            color: #c0392b;
+        }
+
+        .message-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left-color: var(--warning);
+            color: #d35400;
+        }
+
+        .message-info {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left-color: var(--info);
+            color: #2980b9;
+        }
+
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .results-table th, .results-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .results-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .status-success {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-error {
+            color: var(--error);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .register-container {
+                padding: 1.5rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-brand span {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav aria-label="Main navigation">
+            <a href="/" class="nav-brand">
+                <i class="fas fa-user-check"></i>
+                <span>FaceTrack</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="/register" class="active"><i class="fas fa-user-plus"></i> Register Face</a></li>
+                <li><a href="/attendance_table"><i class="fas fa-table"></i> View Records</a></li>
+                <li><a href="/roster"><i class="fas fa-list"></i> Class Roster</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="register-container">
+            <div class="page-header">
+                <h1>Register Face</h1>
+                <p>Add new faces to the recognition system</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="single">Single Registration</button>
+                <button class="tab-btn" data-tab="bulk">Bulk Registration</button>
+            </div>
+
+            <!-- Single Registration Tab -->
+            <div id="single" class="tab-content active">
+                <div class="form-section">
+                    <div class="form-group">
+                        <button id="startCameraBtn" class="btn btn-primary btn-block btn-lg">
+                            <i class="fas fa-camera"></i> Start Camera
+                        </button>
+                    </div>
+
+                    <div id="videoContainer" class="video-container" style="display: none;">
+                        <video id="video" width="500" height="375" playsinline></video>
+                        <div id="videoOverlay" class="video-overlay">
+                            <i class="fas fa-video-slash"></i>
+                            <p>Camera is currently inactive</p>
+                        </div>
+                    </div>
+
+                    <div id="singleForm" style="display: none;">
+                        <div class="form-group">
+                            <label for="nameInput" class="form-label">Full Name</label>
+                            <input type="text" id="nameInput" class="form-control" placeholder="Enter the person's name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <button id="captureBtn" class="btn btn-primary btn-block btn-lg">
+                                <i class="fas fa-camera-retro"></i> Capture & Register
+                            </button>
+                        </div>
+
+                        <div id="singleMessage" class="message" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Registration Tab -->
+            <div id="bulk" class="tab-content">
+                <div class="form-section">
+                    <form id="bulkForm">
+                        <div class="form-group">
+                            <label for="imagesInput" class="form-label">Select Images</label>
+                            <input type="file" id="imagesInput" class="form-control" accept="image/*" multiple required>
+                            <small class="text-muted">Note: Filenames will be used as names (e.g., "john_doe.jpg")</small>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">
+                                <i class="fas fa-upload"></i> Upload & Register
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="bulkMessage" class="message" style="display: none;"></div>
+
+                    <div id="resultsContainer" style="display: none;">
+                        <h3>Registration Results</h3>
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="spinnerOverlay" class="spinner-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const startCameraBtn = document.getElementById('startCameraBtn');
+        const videoContainer = document.getElementById('videoContainer');
+        const video = document.getElementById('video');
+        const videoOverlay = document.getElementById('videoOverlay');
+        const singleForm = document.getElementById('singleForm');
+        const nameInput = document.getElementById('nameInput');
+        const captureBtn = document.getElementById('captureBtn');
+        const singleMessage = document.getElementById('singleMessage');
+        const bulkForm = document.getElementById('bulkForm');
+        const imagesInput = document.getElementById('imagesInput');
+        const bulkMessage = document.getElementById('bulkMessage');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const resultsBody = document.getElementById('resultsBody');
+        const spinnerOverlay = document.getElementById('spinnerOverlay');
+
+        // State variables
+        let stream = null;
+
+        // Tab switching
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Show corresponding tab content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+                
+                // Stop camera when switching tabs
+                if (stream) {
+                    stopCamera();
+                }
+            });
+        });
+
+        // Single registration
+        startCameraBtn.addEventListener('click', async () => {
+            showSpinner();
+            
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user' 
+                    } 
+                });
+                
+                video.srcObject = stream;
+                videoContainer.style.display = 'block';
+                
+                await new Promise((resolve, reject) => {
+                    video.onloadedmetadata = () => {
+                        video.play().then(resolve).catch(reject);
+                    };
+                    video.onerror = reject;
+                    setTimeout(() => reject(new Error('Camera timeout')), 5000);
+                });
+                
+                videoOverlay.style.display = 'none';
+                singleForm.style.display = 'block';
+                startCameraBtn.textContent = 'Camera Active';
+                startCameraBtn.disabled = true;
+                
+                showMessage(singleMessage, 'info', 'Camera ready. Please enter the name and click Capture.');
+            } catch (error) {
+                console.error('Camera error:', error);
+                showMessage(singleMessage, 'error', `Could not access camera: ${error.message}`);
+            } finally {
+                hideSpinner();
+            }
+        });
+
+        captureBtn.addEventListener('click', async () => {
+            const name = nameInput.value.trim();
+            
+            if (!name) {
+                showMessage(singleMessage, 'warning', 'Please enter a name');
+                return;
+            }
+            
+            showSpinner();
+            showMessage(singleMessage, 'info', 'Processing face registration...');
+            
+            try {
+                // Capture image from video
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = canvas.toDataURL('image/jpeg', 0.9);
+                
+                // Send to server
+                const response = await fetch('/register_face', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, image: imageData })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showMessage(singleMessage, 'success', `Successfully registered ${name}`);
+                    nameInput.value = '';
+                } else {
+                    showMessage(singleMessage, 'error', data.message || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showMessage(singleMessage, 'error', 'Error during registration');
+            } finally {
+                hideSpinner();
+            }
+        });
+
+        // Bulk registration
+        bulkForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const files = Array.from(imagesInput.files);
+            if (files.length === 0) {
+                showMessage(bulkMessage, 'warning', 'Please select at least one image');
+                return;
+            }
+            
+            showSpinner();
+            showMessage(bulkMessage, 'info', `Processing ${files.length} images...`);
+            resultsContainer.style.display = 'none';
+            
+            try {
+                const results = [];
+                
+                for (const file of files) {
+                    const name = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+                    
+                    try {
+                        const imageData = await readFileAsDataURL(file);
+                        const response = await fetch('/bulk_register_faces', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ name, image: imageData })
+                        });
+                        
+                        const data = await response.json();
+                        results.push({ name, status: data.status, message: data.message });
+                    } catch (error) {
+                        results.push({ name, status: 'error', message: error.message });
+                    }
+                }
+                
+                // Display results
+                resultsBody.innerHTML = '';
+                results.forEach(result => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${result.name}</td>
+                        <td class="status-${result.status}">${result.status}</td>
+                        <td>${result.message}</td>
+                    `;
+                    resultsBody.appendChild(row);
+                });
+                
+                resultsContainer.style.display = 'block';
+                const successCount = results.filter(r => r.status === 'success').length;
+                showMessage(bulkMessage, 'info', `Processed ${files.length} files (${successCount} successful)`);
+            } catch (error) {
+                console.error('Bulk registration error:', error);
+                showMessage(bulkMessage, 'error', 'Error during bulk registration');
+            } finally {
+                hideSpinner();
+            }
+        });
+
+        // Helper functions
+        function showSpinner() {
+            spinnerOverlay.style.display = 'flex';
+        }
+
+        function hideSpinner() {
+            spinnerOverlay.style.display = 'none';
+        }
+
+        function showMessage(element, type, text) {
+            element.style.display = 'flex';
+            element.className = `message message-${type}`;
+            element.innerHTML = `<i class="fas fa-${getIconForType(type)}"></i> ${text}`;
+        }
+
+        function getIconForType(type) {
+            switch(type) {
+                case 'success': return 'check-circle';
+                case 'error': return 'exclamation-circle';
+                case 'warning': return 'exclamation-triangle';
+                default: return 'info-circle';
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            video.srcObject = null;
+            videoOverlay.style.display = 'flex';
+            singleForm.style.display = 'none';
+            startCameraBtn.textContent = 'Start Camera';
+            startCameraBtn.disabled = false;
+        }
+
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read file'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Clean up camera on page unload
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stopCamera();
+            }
+        });
+    </script>
+</body>
+</html>
