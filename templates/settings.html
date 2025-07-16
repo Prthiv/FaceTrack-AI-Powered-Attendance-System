@@ -13,49 +13,25 @@
             --primary: #4361ee;
             --primary-dark: #3a0ca3;
             --primary-light: #4895ef;
-            --secondary: #4cc9f0;
-            --accent: #f72585;
             --success: #2ecc71;
             --error: #e74c3c;
-            --warning: #f39c12;
-            --info: #3498db;
-            --dark: #1a1a2e;
-            --darker: #16213e;
             --bg: #f8f9fa;
             --card: #ffffff;
             --text: #2b2d42;
             --text-light: #8d99ae;
             --border: #e9ecef;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
             --shadow: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-md: 0 10px 15px rgba(0,0,0,0.1);
-            --shadow-lg: 0 20px 25px rgba(0,0,0,0.1);
-            --shadow-xl: 0 35px 60px rgba(0,0,0,0.15);
-            --radius-sm: 8px;
             --radius: 12px;
             --radius-md: 16px;
-            --radius-lg: 24px;
-            --radius-full: 9999px;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --transition-fast: all 0.15s ease;
-            --max-width: 1200px;
+            --max-width: 600px;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
             min-height: 100vh;
         }
-
         header {
             background-color: var(--card);
             box-shadow: var(--shadow);
@@ -64,7 +40,6 @@
             z-index: 100;
             border-bottom: 1px solid var(--border);
         }
-
         nav {
             display: flex;
             justify-content: space-between;
@@ -73,7 +48,6 @@
             margin: 0 auto;
             padding: 1rem 2rem;
         }
-
         .nav-brand {
             display: flex;
             align-items: center;
@@ -83,18 +57,15 @@
             color: var(--primary-dark);
             text-decoration: none;
         }
-
         .nav-brand i {
             font-size: 1.5rem;
             color: var(--primary);
         }
-
         .nav-links {
             display: flex;
             gap: 2rem;
             list-style: none;
         }
-
         .nav-links a {
             display: flex;
             align-items: center;
@@ -107,37 +78,19 @@
             padding: 0.5rem 0;
             position: relative;
         }
-
         .nav-links a:hover {
             color: var(--primary);
         }
-
-        .nav-links a:hover::after {
-            width: 100%;
+        .nav-links a.active {
+            color: var(--primary-dark);
+            font-weight: 700;
         }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary);
-            transition: var(--transition);
-        }
-
-        .nav-links a i {
-            font-size: 1rem;
-        }
-
         main {
             flex: 1;
             padding: 2rem;
             max-width: var(--max-width);
             margin: 0 auto;
         }
-
         .settings-container {
             background-color: var(--card);
             border-radius: var(--radius-md);
@@ -147,69 +100,26 @@
             margin-bottom: 2rem;
             transition: var(--transition);
         }
-
-        .settings-container:hover {
-            box-shadow: var(--shadow-md);
-        }
-
         .page-header {
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border);
         }
-
         .page-header h1 {
             font-size: 2rem;
             font-weight: 700;
             color: var(--primary-dark);
             margin-bottom: 0.5rem;
         }
-
-        .page-header p {
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-
-        .settings-section {
-            margin-bottom: 2.5rem;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-header i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            width: 40px;
-            height: 40px;
-            background-color: rgba(67, 97, 238, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-
         .form-group {
             margin-bottom: 1.5rem;
         }
-
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
             color: var(--text);
         }
-
         .form-control {
             width: 100%;
             padding: 0.85rem 1.25rem;
@@ -220,13 +130,11 @@
             background-color: var(--card);
             font-family: 'Poppins', sans-serif;
         }
-
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
-
         .btn {
             display: inline-flex;
             align-items: center;
@@ -242,23 +150,15 @@
             outline: none;
             white-space: nowrap;
         }
-
         .btn-primary {
             background-color: var(--primary);
             color: white;
             box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
         }
-
         .btn-primary:hover {
             background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 7px 14px rgba(67, 97, 238, 0.2);
         }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
         .message {
             padding: 1rem;
             border-radius: var(--radius);
@@ -268,118 +168,15 @@
             gap: 0.75rem;
             border-left: 4px solid transparent;
         }
-
-        .message i {
-            font-size: 1.25rem;
-        }
-
         .message-success {
             background-color: rgba(46, 204, 113, 0.1);
             border-left-color: var(--success);
             color: #27ae60;
         }
-
         .message-error {
             background-color: rgba(231, 76, 60, 0.1);
             border-left-color: var(--error);
             color: #c0392b;
-        }
-
-        .message-warning {
-            background-color: rgba(243, 156, 18, 0.1);
-            border-left-color: var(--warning);
-            color: #d35400;
-        }
-
-        .message-info {
-            background-color: rgba(52, 152, 219, 0.1);
-            border-left-color: var(--info);
-            color: #2980b9;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
-        }
-
-        .checkbox-group label {
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .spinner-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(2px);
-        }
-
-        .spinner {
-            width: 3rem;
-            height: 3rem;
-            border: 3px solid var(--primary-light);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                padding: 1rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            .settings-container {
-                padding: 1.5rem;
-            }
-
-            .page-header h1 {
-                font-size: 1.75rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav-brand span {
-                display: none;
-            }
-
-            .nav-links {
-                gap: 0.75rem;
-            }
-
-            .nav-links a span {
-                display: none;
-            }
-
-            .nav-links a i {
-                font-size: 1.2rem;
-            }
-
-            .page-header h1 {
-                font-size: 1.5rem;
-            }
         }
     </style>
 </head>
@@ -399,389 +196,72 @@
             </ul>
         </nav>
     </header>
-
     <main>
         <div class="settings-container">
             <div class="page-header">
-                <h1>System Settings</h1>
-                <p>Configure your FaceTrack application preferences</p>
+                <h1>Change Password</h1>
+                <p>Update your account password below.</p>
             </div>
-
-            <!-- Account Settings Section -->
-            <div class="settings-section">
-                <div class="section-header">
-                    <i class="fas fa-user-shield"></i>
-                    <h2 class="section-title">Account Settings</h2>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword" class="form-label">Current Password</label>
+                    <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password" required>
                 </div>
-                
-                <form id="accountSettingsForm">
-                    <div class="form-group">
-                        <label for="currentPassword" class="form-label">Current Password</label>
-                        <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="newPassword" class="form-label">New Password</label>
-                        <input type="password" id="newPassword" class="form-control" placeholder="Enter new password" required>
-                        <small class="text-muted" style="color: var(--text-light); font-size: 0.85rem;">Password must be at least 8 characters long</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password" required>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-key"></i> Change Password
-                    </button>
-                    
-                    <div id="passwordMessage" class="message" style="display: none;"></div>
-                </form>
-            </div>
-
-            <!-- Attendance Settings Section -->
-            <div class="settings-section">
-                <div class="section-header">
-                    <i class="fas fa-clock"></i>
-                    <h2 class="section-title">Attendance Settings</h2>
+                <div class="form-group">
+                    <label for="newPassword" class="form-label">New Password</label>
+                    <input type="password" id="newPassword" class="form-control" placeholder="Enter new password" required>
+                    <small style="color: var(--text-light); font-size: 0.85rem;">Password must be at least 6 characters long</small>
                 </div>
-                
-                <form id="attendanceSettingsForm">
-                    <div class="form-group">
-                        <label for="attendanceTime" class="form-label">Daily Attendance Time</label>
-                        <input type="time" id="attendanceTime" class="form-control" required>
-                        <small class="text-muted" style="color: var(--text-light); font-size: 0.85rem;">Set the default time for daily attendance capture</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="lateThreshold" class="form-label">Late Threshold (minutes)</label>
-                        <input type="number" id="lateThreshold" class="form-control" min="1" max="60" value="15">
-                        <small class="text-muted" style="color: var(--text-light); font-size: 0.85rem;">Students arriving after this time will be marked late</small>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save Attendance Settings
-                    </button>
-                    
-                    <div id="attendanceMessage" class="message" style="display: none;"></div>
-                </form>
-            </div>
-
-            <!-- Notification Settings Section -->
-            <div class="settings-section">
-                <div class="section-header">
-                    <i class="fas fa-bell"></i>
-                    <h2 class="section-title">Notification Settings</h2>
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password" required>
                 </div>
-                
-                <form id="notificationSettingsForm">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="emailNotifications" checked>
-                        <label for="emailNotifications">Email Notifications</label>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="pushNotifications" checked>
-                        <label for="pushNotifications">Push Notifications</label>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="dailyReports">
-                        <label for="dailyReports">Daily Summary Reports</label>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="notificationEmail" class="form-label">Notification Email Address</label>
-                        <input type="email" id="notificationEmail" class="form-control" placeholder="your@email.com">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save Notification Settings
-                    </button>
-                    
-                    <div id="notificationMessage" class="message" style="display: none;"></div>
-                </form>
-            </div>
-
-            <!-- System Preferences Section -->
-            <div class="settings-section">
-                <div class="section-header">
-                    <i class="fas fa-sliders-h"></i>
-                    <h2 class="section-title">System Preferences</h2>
-                </div>
-                
-                <form id="systemSettingsForm">
-                    <div class="form-group">
-                        <label for="themeSelect" class="form-label">Theme</label>
-                        <select id="themeSelect" class="form-control">
-                            <option value="light">Light</option>
-                            <option value="dark">Dark</option>
-                            <option value="system">System Default</option>
-                        </select>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="autoUpdates" checked>
-                        <label for="autoUpdates">Automatic Updates</label>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="analyticsOptIn">
-                        <label for="analyticsOptIn">Share Usage Analytics (helps improve FaceTrack)</label>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Save Preferences
-                    </button>
-                    
-                    <div id="systemMessage" class="message" style="display: none;"></div>
-                </form>
-            </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-key"></i> Change Password
+                </button>
+                <div id="passwordMessage" class="message" style="display: none;"></div>
+            </form>
         </div>
     </main>
-
-    <div id="spinnerOverlay" class="spinner-overlay" style="display: none;">
-        <div class="spinner"></div>
-    </div>
-
     <script>
-        // DOM Elements
-        const accountForm = document.getElementById('accountSettingsForm');
-        const attendanceForm = document.getElementById('attendanceSettingsForm');
-        const notificationForm = document.getElementById('notificationSettingsForm');
-        const systemForm = document.getElementById('systemSettingsForm');
-        const spinnerOverlay = document.getElementById('spinnerOverlay');
-
-        // Load current settings
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSettings();
-        });
-
-        // Load current settings from server
-        function loadSettings() {
-            showSpinner();
-            
-            // In a real app, you would fetch these from your backend
-            Promise.all([
-                fetch('/get_account_settings').then(res => res.json()),
-                fetch('/get_attendance_settings').then(res => res.json()),
-                fetch('/get_notification_settings').then(res => res.json()),
-                fetch('/get_system_settings').then(res => res.json())
-            ])
-            .then(([account, attendance, notifications, system]) => {
-                // Set attendance settings
-                if (attendance.status === 'success') {
-                    document.getElementById('attendanceTime').value = attendance.time || '09:00';
-                    document.getElementById('lateThreshold').value = attendance.late_threshold || 15;
-                }
-                
-                // Set notification settings
-                if (notifications.status === 'success') {
-                    document.getElementById('emailNotifications').checked = notifications.email || false;
-                    document.getElementById('pushNotifications').checked = notifications.push || false;
-                    document.getElementById('dailyReports').checked = notifications.daily_reports || false;
-                    document.getElementById('notificationEmail').value = notifications.email_address || '';
-                }
-                
-                // Set system settings
-                if (system.status === 'success') {
-                    document.getElementById('themeSelect').value = system.theme || 'light';
-                    document.getElementById('autoUpdates').checked = system.auto_updates || true;
-                    document.getElementById('analyticsOptIn').checked = system.analytics || false;
-                }
-            })
-            .catch(error => {
-                console.error('Error loading settings:', error);
-                showMessage('Error loading settings', 'error');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
-        }
-
-        // Handle account form submission
-        accountForm.addEventListener('submit', (e) => {
+        const form = document.getElementById('changePasswordForm');
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (newPassword !== confirmPassword) {
-                showMessage('Passwords do not match', 'error', 'passwordMessage');
+            const current = document.getElementById('currentPassword').value;
+            const newpw = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const msg = document.getElementById('passwordMessage');
+            msg.style.display = 'none';
+            if (newpw !== confirm) {
+                showMessage('Passwords do not match', 'error');
                 return;
             }
-            
-            if (newPassword.length < 8) {
-                showMessage('Password must be at least 8 characters', 'error', 'passwordMessage');
+            if (newpw.length < 6) {
+                showMessage('Password must be at least 6 characters', 'error');
                 return;
             }
-            
-            showSpinner();
-            
             fetch('/change_password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ currentPassword, newPassword })
+                body: JSON.stringify({ current, newpw })
             })
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    showMessage('Password changed successfully', 'success', 'passwordMessage');
-                    accountForm.reset();
+                    showMessage('Password changed successfully', 'success');
+                    form.reset();
                 } else {
-                    showMessage(data.message || 'Failed to change password', 'error', 'passwordMessage');
+                    showMessage(data.message || 'Failed to change password', 'error');
                 }
             })
-            .catch(error => {
-                console.error('Error changing password:', error);
-                showMessage('Error changing password', 'error', 'passwordMessage');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
+            .catch(() => showMessage('Error changing password', 'error'));
         });
-
-        // Handle attendance form submission
-        attendanceForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const time = document.getElementById('attendanceTime').value;
-            const lateThreshold = document.getElementById('lateThreshold').value;
-            
-            showSpinner();
-            
-            fetch('/set_attendance_settings', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ time, late_threshold: lateThreshold })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showMessage('Attendance settings saved', 'success', 'attendanceMessage');
-                } else {
-                    showMessage(data.message || 'Failed to save settings', 'error', 'attendanceMessage');
-                }
-            })
-            .catch(error => {
-                console.error('Error saving attendance settings:', error);
-                showMessage('Error saving attendance settings', 'error', 'attendanceMessage');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
-        });
-
-        // Handle notification form submission
-        notificationForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('emailNotifications').checked;
-            const push = document.getElementById('pushNotifications').checked;
-            const dailyReports = document.getElementById('dailyReports').checked;
-            const emailAddress = document.getElementById('notificationEmail').value;
-            
-            showSpinner();
-            
-            fetch('/set_notification_settings', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, push, daily_reports: dailyReports, email_address: emailAddress })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showMessage('Notification settings saved', 'success', 'notificationMessage');
-                } else {
-                    showMessage(data.message || 'Failed to save settings', 'error', 'notificationMessage');
-                }
-            })
-            .catch(error => {
-                console.error('Error saving notification settings:', error);
-                showMessage('Error saving notification settings', 'error', 'notificationMessage');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
-        });
-
-        // Handle system form submission
-        systemForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const theme = document.getElementById('themeSelect').value;
-            const autoUpdates = document.getElementById('autoUpdates').checked;
-            const analytics = document.getElementById('analyticsOptIn').checked;
-            
-            showSpinner();
-            
-            fetch('/set_system_settings', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ theme, auto_updates: autoUpdates, analytics })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showMessage('System preferences saved', 'success', 'systemMessage');
-                    // Apply theme immediately
-                    if (theme === 'dark') {
-                        document.documentElement.style.setProperty('--bg', '#1a1a2e');
-                        document.documentElement.style.setProperty('--card', '#16213e');
-                        document.documentElement.style.setProperty('--text', '#ffffff');
-                        document.documentElement.style.setProperty('--text-light', '#8d99ae');
-                        document.documentElement.style.setProperty('--border', '#2c3e50');
-                    } else if (theme === 'light') {
-                        document.documentElement.style.setProperty('--bg', '#f8f9fa');
-                        document.documentElement.style.setProperty('--card', '#ffffff');
-                        document.documentElement.style.setProperty('--text', '#2b2d42');
-                        document.documentElement.style.setProperty('--text-light', '#8d99ae');
-                        document.documentElement.style.setProperty('--border', '#e9ecef');
-                    }
-                } else {
-                    showMessage(data.message || 'Failed to save preferences', 'error', 'systemMessage');
-                }
-            })
-            .catch(error => {
-                console.error('Error saving system settings:', error);
-                showMessage('Error saving system settings', 'error', 'systemMessage');
-            })
-            .finally(() => {
-                hideSpinner();
-            });
-        });
-
-        // Helper function to show spinner
-        function showSpinner() {
-            spinnerOverlay.style.display = 'flex';
-        }
-
-        // Helper function to hide spinner
-        function hideSpinner() {
-            spinnerOverlay.style.display = 'none';
-        }
-
-        // Helper function to show messages
-        function showMessage(text, type, elementId) {
-            const messageElement = document.getElementById(elementId);
-            messageElement.style.display = 'flex';
-            messageElement.className = `message message-${type}`;
-            messageElement.innerHTML = `<i class="fas fa-${getIconForType(type)}"></i> ${text}`;
-            
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                messageElement.style.display = 'none';
-            }, 5000);
-        }
-
-        function getIconForType(type) {
-            switch(type) {
-                case 'success': return 'check-circle';
-                case 'error': return 'exclamation-circle';
-                case 'warning': return 'exclamation-triangle';
-                default: return 'info-circle';
-            }
+        function showMessage(text, type) {
+            const msg = document.getElementById('passwordMessage');
+            msg.style.display = 'flex';
+            msg.className = `message message-${type}`;
+            msg.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}`;
+            setTimeout(() => { msg.style.display = 'none'; }, 5000);
         }
     </script>
 </body>

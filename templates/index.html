@@ -1183,7 +1183,7 @@
                             <div class="stat-icon present">
                                 <i class="fas fa-check"></i>
                             </div>
-                            <div class="stat-value">24</div>
+                            <div class="stat-value"></div>
                             <div class="stat-label">Present</div>
                         </div>
                         
@@ -1191,7 +1191,7 @@
                             <div class="stat-icon absent">
                                 <i class="fas fa-times"></i>
                             </div>
-                            <div class="stat-value">3</div>
+                            <div class="stat-value"></div>
                             <div class="stat-label">Absent</div>
                         </div>
                         
@@ -1199,7 +1199,7 @@
                             <div class="stat-icon late">
                                 <i class="fas fa-clock"></i>
                             </div>
-                            <div class="stat-value">5</div>
+                            <div class="stat-value"></div>
                             <div class="stat-label">Late</div>
                         </div>
                         
@@ -1207,7 +1207,7 @@
                             <div class="stat-icon total">
                                 <i class="fas fa-users"></i>
                             </div>
-                            <div class="stat-value">32</div>
+                            <div class="stat-value"></div>
                             <div class="stat-label">Total</div>
                         </div>
                     </div>
@@ -1228,50 +1228,7 @@
                     </div>
                     
                     <div class="activity-list">
-                        <div class="activity-item">
-                            <div class="activity-avatar">JD</div>
-                            <div class="activity-content">
-                                <div class="activity-name">John Doe</div>
-                                <div class="activity-time">2 minutes ago</div>
-                            </div>
-                            <span class="activity-status status-present">Present</span>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-avatar">AS</div>
-                            <div class="activity-content">
-                                <div class="activity-name">Alice Smith</div>
-                                <div class="activity-time">5 minutes ago</div>
-                            </div>
-                            <span class="activity-status status-late">Late (5 min)</span>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-avatar">RJ</div>
-                            <div class="activity-content">
-                                <div class="activity-name">Robert Johnson</div>
-                                <div class="activity-time">12 minutes ago</div>
-                            </div>
-                            <span class="activity-status status-present">Present</span>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-avatar">MB</div>
-                            <div class="activity-content">
-                                <div class="activity-name">Maria Brown</div>
-                                <div class="activity-time">18 minutes ago</div>
-                            </div>
-                            <span class="activity-status status-present">Present</span>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-avatar">DW</div>
-                            <div class="activity-content">
-                                <div class="activity-name">David Wilson</div>
-                                <div class="activity-time">25 minutes ago</div>
-                            </div>
-                            <span class="activity-status status-absent">Absent</span>
-                        </div>
+                        <!-- Real activity will be loaded here by JS; all hardcoded demo entries removed -->
                     </div>
                 </section>
             </div>
@@ -1610,11 +1567,14 @@
         // Dashboard Stats
         function loadDashboardStats() {
             fetch('/dashboard_stats')
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 401) { window.location.href = '/login'; return; }
+                    return res.json();
+                })
                 .then(data => {
+                    if (!data) return;
                     if (data.status === 'success') {
                         const stats = data;
-                        document.querySelector('.stat-item .stat-value').textContent = stats.present;
                         document.querySelectorAll('.stat-item')[0].querySelector('.stat-value').textContent = stats.present;
                         document.querySelectorAll('.stat-item')[1].querySelector('.stat-value').textContent = stats.absent;
                         document.querySelectorAll('.stat-item')[2].querySelector('.stat-value').textContent = stats.late;
@@ -1627,8 +1587,12 @@
         // Recent Activity
         function loadRecentActivity() {
             fetch('/recent_activity')
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 401) { window.location.href = '/login'; return; }
+                    return res.json();
+                })
                 .then(data => {
+                    if (!data) return;
                     const list = document.querySelector('.activity-list');
                     list.innerHTML = '';
                     if (data.status === 'success' && data.activity.length > 0) {
@@ -1669,8 +1633,12 @@
         // Notifications
         function loadNotifications() {
             fetch('/notifications')
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 401) { window.location.href = '/login'; return; }
+                    return res.json();
+                })
                 .then(data => {
+                    if (!data) return;
                     const btn = document.querySelector('.notification-btn');
                     let badge = btn.querySelector('.notification-badge');
                     if (data.status === 'success' && data.notifications.length > 0) {
@@ -1870,6 +1838,27 @@
                 // Ignore errors
             }
         }
+
+        function checkLoginAndLoadData() {
+            fetch('/current_user')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success' && data.user && data.user.name) {
+                        // User is logged in, load dashboard data
+                        loadDashboardStats();
+                        loadRecentActivity();
+                        loadNotifications();
+                        loadSchedule();
+                    } else {
+                        window.location.href = '/login';
+                    }
+                })
+                .catch(() => {
+                    window.location.href = '/login';
+                });
+        }
+        // Call this on page load instead of calling loadDashboardStats(), etc. directly
+        checkLoginAndLoadData();
     </script>
 </body>
 </html>
